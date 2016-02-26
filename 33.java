@@ -1,6 +1,9 @@
 // 33. Search in Rotated Sorted Array
 // https://leetcode.com/problems/search-in-rotated-sorted-array/
 
+// The logic is that if reverse-order it means the other part is in-order
+// since there is only one rotation.
+
 public class Solution {
     public int search(int[] nums, int target) {
         if (nums == null || nums.length == 0) return -1;
