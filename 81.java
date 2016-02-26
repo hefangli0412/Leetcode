@@ -4,6 +4,9 @@
 // example
 // [1,3,1,1,1] search for 3
 
+// The logic is that if reverse-order it means the other part is in-order
+// since there is only one rotation.
+
 public class Solution {
     public boolean search(int[] nums, int target) {
         if (nums == null || nums.length == 0) return false;
