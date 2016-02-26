@@ -24,3 +24,19 @@ public class Solution {
         }
     }
 }
+
+// Iterative way
+public class Solution {
+    public int findMin(int[] nums) {
+        int n=nums.length;
+        if(nums[0]<nums[n-1]) return nums[0];
+        int start=0,end=n-1;
+        while(start<=end){
+            int mid=start+(end-start)/2;
+            if(nums[start]>nums[mid]) end=mid;
+            else if(nums[mid]>nums[end]) start=mid+1;
+            else return nums[start];
+        }
+        return 0;
+    }
+}
