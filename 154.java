@@ -1,6 +1,9 @@
 // 154. Find Minimum in Rotated Sorted Array II
 // https://leetcode.com/problems/find-minimum-in-rotated-sorted-array-ii/
 
+// The logic is that if reverse-order it means the other part is in-order
+// since there is only one rotation.
+
 public class Solution {
     public int findMin(int[] nums) {
         // Assume that nums has at least one element
