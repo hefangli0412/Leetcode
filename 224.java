@@ -1,6 +1,10 @@
 // 224. Basic Calculator
 // https://leetcode.com/problems/basic-calculator/
 
+/* char - > int : int num = ch - '0';
+if char is a digit number : Character.isDigit(ch)
+*/
+
 /* My approach is based on the fact that the final arithmetic operation on each number 
 is not only depend on the sign directly operating on it, but all signs associated with 
 each unmatched '(' before that number.
