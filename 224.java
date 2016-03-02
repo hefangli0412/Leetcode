@@ -1,8 +1,8 @@
 // 224. Basic Calculator
 // https://leetcode.com/problems/basic-calculator/
 
-/* char - > int : int num = ch - '0';
-if char is a digit number : Character.isDigit(ch)
+/* convert char to int : int num = ch - '0';
+find if char is a digit number : Character.isDigit(ch);
 */
 
 /* My approach is based on the fact that the final arithmetic operation on each number 
