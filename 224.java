@@ -21,17 +21,26 @@ sign:
 
 */
 
+/* We only record one value because adding the current number only need the help of 
+the current sign. When we encounter any '(' we should record the current state and 
+start a new process, so we need a stack. The stack only contains the state before '('.
+When ')' comes, we merge the current state with the previous one. '(' and ')' come 
+in pairs.
+*/
+
 public static int calculate(String s) {
-    int len = s.length(), sign = 1, result = 0;
-    Stack<Integer> stack = new Stack<Integer>();
-    for (int i = 0; i < len; i++) {
+    int result = 0; // only record one value
+    int sign = 1;
+    Stack<Integer> stack = new Stack<Integer>(); // help to record and restore the current state
+                                                // when encountering '(' and ')'.
+    for (int i = 0; i < s.length(); i++) {
         if (Character.isDigit(s.charAt(i))) {
-            int sum = s.charAt(i) - '0';
-            while (i + 1 < len && Character.isDigit(s.charAt(i + 1))) {
-                sum = sum * 10 + s.charAt(i + 1) - '0';
+            int num = s.charAt(i) - '0';
+            while (i + 1 < s.length() && Character.isDigit(s.charAt(i + 1))) {
+                num = num * 10 + s.charAt(i + 1) - '0';
                 i++;
             }
-            result += sum * sign;
+            result += num * sign;
         } else if (s.charAt(i) == '+')
             sign = 1;
         else if (s.charAt(i) == '-')
@@ -47,48 +56,4 @@ public static int calculate(String s) {
 
     }
     return result;
-}
-
-/* My Stack Version */
-
-public class Solution {
-    public int calculate(String s) {
-        char[] arr = s.toCharArray();
-        
-        Deque<Integer> numStack = new LinkedList<>();
-        Deque<Character> opStack = new LinkedList<>();
-        
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] == ' ') {
-                continue;
-            } else if (arr[i] == '(' || arr[i] == '+' || arr[i] == '-') {
-                opStack.push(arr[i]);
-            } else {
-                int num = 0;
-                if (arr[i] == ')') {
-                    opStack.pop(); // must be '('
-                    num = numStack.pop();
-                } else {
-                    num = arr[i] - '0';
-                    while (i + 1 < arr.length && arr[i + 1] >= '0' && arr[i + 1] <= '9') {
-                        i++;
-                        num = num * 10 + arr[i] - '0';
-                    }
-                }
-                
-                while (!opStack.isEmpty() && (opStack.peek() == '+' || opStack.peek() == '-')) {
-                    char op = opStack.pop();
-                    if (op == '+') {
-                        num = numStack.pop() + num;
-                    } else if (op == '-') {
-                        num = numStack.pop() - num;
-                    }
-                }
-                
-                numStack.push(num);
-            }
-        }
-        
-        return numStack.peek();
-    }
 }
