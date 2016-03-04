@@ -28,32 +28,39 @@ When ')' comes, we merge the current state with the previous one. '(' and ')' co
 in pairs.
 */
 
-public static int calculate(String s) {
-    int result = 0; // only record one value
-    int sign = 1;
-    Stack<Integer> stack = new Stack<Integer>(); // help to record and restore the current state
-                                                // when encountering '(' and ')'.
-    for (int i = 0; i < s.length(); i++) {
-        if (Character.isDigit(s.charAt(i))) {
-            int num = s.charAt(i) - '0';
-            while (i + 1 < s.length() && Character.isDigit(s.charAt(i + 1))) {
-                num = num * 10 + s.charAt(i + 1) - '0';
-                i++;
+public class Solution {
+    public int calculate(String s) {
+        int result = 0;
+        int sign = 1;
+        Deque<Integer> stack = new LinkedList<>();  // help to record and restore the current state
+                                                    // when encountering '(' and ')'.
+        
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            if (ch == ' ') {
+                continue;
+            } else if (Character.isDigit(ch)) {
+                int num = ch - '0';
+                while (i + 1 < s.length() && Character.isDigit(s.charAt(i + 1))) {
+                    i++;
+                    num = num * 10 + s.charAt(i) - '0';
+                }
+                result += num * sign;
+            } else if (ch == '+') {
+                sign = 1;
+            } else if (ch == '-') {
+                sign = -1; // just like there is no parenthesis
+            } else if (ch == '(') {
+                stack.push(result);
+                stack.push(sign);
+                result = 0;
+                sign = 1;
+            } else { // ch == ')'
+                result = result * stack.pop() + stack.pop();
+                // sign does not matter here, since no number following
             }
-            result += num * sign;
-        } else if (s.charAt(i) == '+')
-            sign = 1;
-        else if (s.charAt(i) == '-')
-            sign = -1;
-        else if (s.charAt(i) == '(') {
-            stack.push(result);
-            stack.push(sign);
-            result = 0;
-            sign = 1;
-        } else if (s.charAt(i) == ')') {
-            result = result * stack.pop() + stack.pop();
         }
-
+        
+        return result;
     }
-    return result;
 }
