@@ -4,6 +4,8 @@
 /* The root of the Trie is an empty character. When following a path in the Trie,
   the current character should be a child node of the current node.
   
+  No need to store character at TrieNode. c.next[i] != null is enough.
+  
   Refer to https://leetcode.com/discuss/46959/ac-java-solution-simple-using-single-array.
 */
 class TrieNode {
