@@ -1,6 +1,11 @@
 // 208. Implement Trie (Prefix Tree)
 // https://leetcode.com/problems/implement-trie-prefix-tree/
 
+/* The root of the Trie is an empty character. When following a path in the Trie,
+  the current character should be a child node of the current node.
+  
+  Refer to https://leetcode.com/discuss/46959/ac-java-solution-simple-using-single-array.
+*/
 class TrieNode {
     TrieNode[] children = new TrieNode[26];
     boolean isWord = false;
