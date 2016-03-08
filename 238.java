@@ -1,5 +1,5 @@
-// 152. Maximum Product Subarray
-// https://leetcode.com/problems/maximum-product-subarray/
+// 238. Product of Array Except Self
+// https://leetcode.com/problems/product-of-array-except-self/
 
 /* The idea is simply. The product basically is calculated using 
 the numbers before the current number and the numbers after the current number. 
