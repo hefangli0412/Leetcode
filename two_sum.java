@@ -1,3 +1,6 @@
+
+// https://docs.google.com/document/d/10v5ieA0Q94i1emAKARSpt6KpMk6ldPMHejv1T0wqUPw/edit
+
 1. sorted array, two pointers, no duplicates, sum == target
 {1, 1, 3, 3}, target = 4,  return 1
 
