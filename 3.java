@@ -7,25 +7,18 @@ public class Solution {
             return 0;
         }
         
-        Map<Character, Integer> countMap = new HashMap<>();
-        int max = 0, i = 0, j = 0;
-        
-        while (j < s.length()) {
-            Integer cnt_j = countMap.get(s.charAt(j));
-            if (cnt_j == null || cnt_j == 0) {
-                max = Math.max(max, j - i + 1);
-                countMap.put(s.charAt(j), 1);
-                j++;
-            } else { // cnt_j == 1
-                countMap.put(s.charAt(j), 2);
-                
-                while (true) {
-                    Integer cnt_i = countMap.get(s.charAt(i));
-                    countMap.put(s.charAt(i), cnt_i - 1);
-                    i++;
-                    if (cnt_i == 2) break;
-                }
-                j++;
+        Set<Character> set = new HashSet<>(); // no duplicates
+        int max = 0;
+        int slow = 0;
+        int fast = 0;
+        while (fast < s.length()) {
+            if (!set.contains(s.charAt(fast))) {
+                set.add(s.charAt(fast));
+                fast++;
+                max = Math.max(max, fast - slow);
+            } else {
+                set.remove(s.charAt(slow));
+                slow++;
             }
         }
         
