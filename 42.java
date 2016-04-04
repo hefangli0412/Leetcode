@@ -5,7 +5,10 @@
 
 /* 我们要找的是左边的最大值和右边的最大值中的最小值；
 two pointer相向而行，记录左边最大和右边最大；
-trick是每次移动某边最大值较小的，因为这个位置的结果已经决定了 */
+trick是每次移动某边最大值较小的，因为这个位置的结果已经决定了
+
+max_water[i] = min(highest_on_left[i], highest_on_right[i]);
+Space Optimization - 2 pointers */
 
 public int maxTrapped(int[] array) {
   if (array == null || array.length < 2) return 0;
