@@ -1,14 +1,15 @@
 // 84. Largest Rectangle in Histogram
 
 public class Solution {
-
     // brutal force ?
     // for each element in the array, find the nearest smaller elements on both left and right sides
     // then how to optimize it ? 
-    // for one side, we can utilize "next taller person" and maitain an increasing stack
+    // for one side, we can utilize "next taller person" to find the nearest smaller element and maitain an increasing stack
     // for the other side, we may look at this problem from a different perspective - 
-    // the boundary is always lower than middle elements fo we only update global max when we meet a smaller element
-    // elements not in the stack but in the original array are greater than the nearest right element in the stack
+    // the boundaries are always lower than middle elements so we only update global max when we meet a smaller element
+    //
+    // to the right side of an element in the stack, elements not in the stack but in the original array are greater than 
+    // that element according to “next smaller element”
     
     public int largestRectangleArea(int[] heights) {
         int max = 0;
