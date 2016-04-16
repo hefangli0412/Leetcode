@@ -17,52 +17,51 @@ Modifying board[i][j] = '#' and revert it back later.
 
 class TrieNode {
     TrieNode[] next = new TrieNode[26];
-    String word = null; // used to add to the result list
+    String word = null;
 }
 
 public class Solution {
-    TrieNode root = new TrieNode();
-    int[][] dirs = new int[][] {{1,0}, {-1,0}, {0,1}, {0,-1}};
+    int[][] DIRS = {{1,0}, {-1,0}, {0,1}, {0,-1}};
     
     public List<String> findWords(char[][] board, String[] words) {
         List<String> res = new ArrayList<>();
         
         TrieNode root = buildTrie(words);
         
+        boolean[][] visited = new boolean[board.length][board[0].length];
+
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                dfs(res, board, i, j, root);
+                dfs(res, board, visited, i, j, root);
             }
         }
         
         return res;
     }
     
-    private void dfs(List<String> res, char[][] board, int i, int j, TrieNode cur) {
-        // // base case
-        if (i < 0 || i >= board.length || j < 0 || j >= board[0].length || board[i][j] == '#') return;
+    private void dfs(List<String> res, char[][] board, boolean[][] visited, int x, int y, TrieNode cur) {
+        TrieNode next = cur.next[board[x][y] - 'a'];
         
-        // check '#' before calling this method
-        TrieNode next = cur.next[board[i][j] - 'a'];
-        
-        if (next == null) return;
+        if (next == null) {
+            return;
+        }
         
         if (next.word != null) {
             res.add(next.word);
             next.word = null; // de-duplicate
-            // No need to use HashSet to de-duplicate. Use "one time search" trie.
         }
         
-        char original = board[i][j];
-        board[i][j] = '#';
+        visited[x][y] = true;
         
-        for (int k = 0; k < dirs.length; k++) {
-            int x = dirs[k][0];
-            int y = dirs[k][1];
-            dfs(res, board, i + x, j + y, next);
+        for (int i = 0; i < 4; i++) {
+            int newX = x + DIRS[i][0];
+            int newY = y + DIRS[i][1];
+            if (newX >= 0 && newX < board.length && newY >= 0 && newY < board[0].length && !visited[newX][newY]) {
+                dfs(res, board, visited, newX, newY, next);
+            }
         }
         
-        board[i][j] = original;
+        visited[x][y] = false;
     }
     
     private TrieNode buildTrie(String[] words) {
