@@ -75,3 +75,77 @@ private static void merge(int[] nums, int[] count, int[] index, int left, int mi
         cur++; l++;
     }
 }
+
+// solution 2: augmented BST
+
+public class Solution {
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> res = new ArrayList<Integer>();
+        
+        if (nums == null || nums.length < 1) {
+            return res;
+        }
+        
+        // step 1: construct
+        int[] sortedNums = nums.clone();
+        Arrays.sort(sortedNums);
+        TreeNode root = constructBST(sortedNums, 0, nums.length - 1);
+        
+        // step 2: traverse from right to left
+        for (int i = nums.length - 1; i >= 0; i--) {
+            res.add(insert(root, nums[i]));
+        }
+        
+        Collections.reverse(res);
+        
+        return res;
+    }
+    
+    // constructed balanced augmented binary seatch tree
+    private TreeNode constructBST(int[] nums, int left, int right) {
+        if (left > right) {
+            return null;
+        } else if (left == right) {
+            return new TreeNode(nums[left]);
+        }
+        
+        int mid = left + (right - left) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = constructBST(nums, left, mid - 1);
+        root.right = constructBST(nums, mid + 1, right);
+        
+        return root;
+    }
+    
+    // insert and find numSmaller
+    private int insert(TreeNode root, int target) {
+    	int numSmaller = 0;
+    	while (root.val != target) {
+    		if (root.val < target) {
+    			numSmaller += root.numLeft + root.count;
+    			root = root.right;
+    		} else {
+    			root.numLeft++;
+    			root = root.left;
+    		}
+    	}
+    	root.count++;
+    	return numSmaller + root.numLeft;
+    }
+    
+    // Augmented BST
+    class TreeNode {
+        int val;
+        int numLeft;
+        int count;
+        TreeNode left;
+        TreeNode right;
+        public TreeNode(int val) {
+            this.val = val;
+            numLeft = 0;
+            count = 0;
+            left = null;
+            right = null;
+        }
+    }
+}
