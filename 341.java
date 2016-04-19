@@ -16,19 +16,19 @@
  * }
  */
 public class NestedIterator implements Iterator<Integer> {
-    Deque<Iterator<NestedInteger>> stack; // type is NestedIterator
-    Integer nextNum;
-    
+	Deque<Iterator<NestedInteger>> stack; // type is ListIterator
+	Integer nextNum;
+
 	public NestedIterator(List<NestedInteger> nestedList) {
 		stack = new LinkedList<Iterator<NestedInteger>>();
-        stack.push(nestedList.iterator());
-        move();
-    }
-	
+		stack.push(nestedList.iterator());
+		move();
+	}
+
 	@Override
 	public boolean hasNext() {
 		move();
-        return nextNum != null;
+		return nextNum != null;
 	}
 
 	@Override
@@ -37,26 +37,28 @@ public class NestedIterator implements Iterator<Integer> {
 		nextNum = null;
 		return res;
 	}
-    
-    public void move() {
-        while (nextNum == null && !stack.isEmpty()) {
-            Iterator<NestedInteger> iter = stack.pop();
-            if (iter.hasNext()) {
-                NestedInteger nextNI = iter.next();
-                if (nextNI.isInteger()) {
-                    nextNum = nextNI.getInteger();
-                    stack.push(iter);
-                    return;
-                } else {
-                    // 不是数字就把list的iterator放到stack里
-                	stack.push(iter);
-                	Iterator<NestedInteger> nestIter = nextNI.getList().iterator();
-                    stack.push(nestIter);
-                }
-            }
-        }
-    }
+
+	// If there is a next element in this data structure, assign it to nextNum.
+	// Iterators in different layers are stored in the stack.
+	public void move() {
+		while (nextNum == null && !stack.isEmpty()) {
+			Iterator<NestedInteger> iter = stack.pop();
+			if (iter.hasNext()) {
+				NestedInteger nextNI = iter.next();
+				if (nextNI.isInteger()) {
+					nextNum = nextNI.getInteger();
+					stack.push(iter);
+					return;
+				} else {
+					stack.push(iter);
+					// 不是数字就把list的iterator放到stack里
+					stack.push(nextNI.getList().iterator());
+				}
+			}
+		}
+	}
 }
+
 
 /**
  * Your NestedIterator object will be instantiated and called as such:
