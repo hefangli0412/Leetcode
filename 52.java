@@ -1,41 +1,33 @@
 https://leetcode.com/problems/n-queens-ii/
 
 public class Solution {
-    private int count = 0;
-    
     public int totalNQueens(int n) {
-        count = 0;
-        List<Integer> cur = new ArrayList<>();
-        
-        dfs(cur, n);
-        
-        return count;
-    }
-    
-    private void dfs(List<Integer> cur, int n) {
-        if (cur.size() == n) {
-            count++;
-            return;
-        }
-        
-        for (int i = 0; i < n; i++) {
-            cur.add(i);
-            if (checkConflict(cur)) {
-                dfs(cur, n);
-            }
-            cur.remove(cur.size() - 1);
-        }
-    }
-    
-    private boolean checkConflict(List<Integer> cur) {
-        int last = cur.get(cur.size() - 1);
-        
-        for (int i = 0; i < cur.size() - 1; i++) {
-            if (last == cur.get(i) || Math.abs(last - cur.get(i)) == Math.abs(cur.size() - 1 - i)) {
-                return false;
-            }
-        }
-        
-        return true;
-    }
+		int[] row = new int[n];
+		return totalNQueensHelper(row, n, 0);
+	}
+	
+	private int totalNQueensHelper(int[] row, int n, int index) {
+		if (index == n) {
+			return 1;
+		}
+		
+		int count = 0;
+		for (int i = 0; i < n; i++) {
+			row[index] = i;
+			if (isValidQueen(row, index)) {
+				count += totalNQueensHelper(row, n, index + 1);
+			}
+		}
+		
+		return count;
+	}
+	
+	private boolean isValidQueen(int[] row, int index) {
+		for (int i = 0; i < index; i++) {
+			if (row[i] == row[index] || index - i == Math.abs(row[index] - row[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
