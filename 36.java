@@ -1,5 +1,9 @@
 https://leetcode.com/problems/valid-sudoku/
 
+// 00 01 02
+// 10 11 12
+// 20 21 22
+
 public class Solution {
     public boolean isValidSudoku(char[][] board) {
         int len = board.length;
