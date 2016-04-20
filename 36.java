@@ -1,30 +1,26 @@
 https://leetcode.com/problems/valid-sudoku/
 
 public class Solution {
-    // R+pos+num
-    // C+pos+num
-    // P+pos+num
     public boolean isValidSudoku(char[][] board) {
-        Set<String> set = new HashSet<>();
         int len = board.length;
+        int[] hset = new int[len];
+        int[] vset = new int[len];
+        int[] bckt = new int[len];
+        
         for (int i = 0; i < len; i++) {
             for (int j = 0; j < len; j++) {
-                char ch = board[i][j];
-                if (ch == '.') {
-                    continue;
-                }
-                int index = ch - 'a';
-                if (!set.add("R-" + i + "-" + ch)) {
-                    return false;
-                }
-                if (!set.add("C-" + j + "-" + ch)) {
-                    return false;
-                }
-                if (!set.add("P-" + String.valueOf(i / 3 * 3 + j / 3 )+ "-" + ch)) {
-                    return false;
+                if (board[i][j] != '.') {
+                    int idx = 1 << (board[i][j] - '1');
+                    if ((hset[i] & idx) != 0 || (vset[j] & idx) != 0 || (bckt[(i / 3) * 3 + j / 3] & idx) != 0) {
+                        return false;
+                    }
+                    hset[i] |= idx;
+                    vset[j] |= idx;
+                    bckt[(i / 3) * 3 + j / 3] |= idx;
                 }
             }
         }
+        
         return true;
     }
 }
