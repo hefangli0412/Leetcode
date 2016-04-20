@@ -16,49 +16,47 @@
  * }
  */
 public class NestedIterator implements Iterator<Integer> {
-	Deque<Iterator<NestedInteger>> stack; // type is ListIterator
+    Deque<Iterator<NestedInteger>> stack; // type is ListIterator
 	Integer nextNum;
 
 	public NestedIterator(List<NestedInteger> nestedList) {
 		stack = new LinkedList<Iterator<NestedInteger>>();
 		stack.push(nestedList.iterator());
-		move();
+		nextNum = null;
 	}
 
 	@Override
 	public boolean hasNext() {
-		move();
+		while (nextNum == null && !stack.isEmpty()) {
+			Iterator<NestedInteger> iter = stack.peek();
+			if (iter.hasNext()) {
+				NestedInteger nextNI = iter.next();
+				if (nextNI.isInteger()) {
+					nextNum = nextNI.getInteger();
+				} else {
+					// 不是数字就把list的iterator放到stack里
+					Iterator<NestedInteger> nestIter = nextNI.getList().iterator();
+					stack.push(nestIter);
+				}
+			} else {
+				stack.pop();
+			}
+		}
+		
 		return nextNum != null;
 	}
 
 	@Override
 	public Integer next() {
+		if (nextNum == null) {
+			throw new NoSuchElementException();
+		}
+		
 		Integer res = nextNum;
 		nextNum = null;
 		return res;
 	}
-
-	// If there is a next element in this data structure, assign it to nextNum.
-	// Iterators in different layers are stored in the stack.
-	public void move() {
-		while (nextNum == null && !stack.isEmpty()) {
-			Iterator<NestedInteger> iter = stack.pop();
-			if (iter.hasNext()) {
-				NestedInteger nextNI = iter.next();
-				if (nextNI.isInteger()) {
-					nextNum = nextNI.getInteger();
-					stack.push(iter);
-					return;
-				} else {
-					stack.push(iter);
-					// 不是数字就把list的iterator放到stack里
-					stack.push(nextNI.getList().iterator());
-				}
-			}
-		}
-	}
 }
-
 
 /**
  * Your NestedIterator object will be instantiated and called as such:
