@@ -3,6 +3,8 @@
 
 /* To get max length of increasing sequences:
 
+考点是memorization!
+
 1. Do DFS from every cell
 2. Compare every 4 direction and skip cells that are out of boundary or smaller
 3. Get matrix max from every cell's max
