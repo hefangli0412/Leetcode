@@ -12,7 +12,9 @@ public class Solution {
         
         Queue<Integer> q = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
-            if (degreeArr[i] == 0) q.offer(i);
+            if (degreeArr[i] == 0) {
+                q.offer(i);
+            }
         }
         
         while (!q.isEmpty()) {
@@ -20,21 +22,22 @@ public class Solution {
             degreeArr[cur]--;
             for (Integer child : childrenList.get(cur)) {
                 degreeArr[child]--;
-                if (degreeArr[child] == 0) q.offer(child);
+                if (degreeArr[child] == 0) {
+                    q.offer(child);
+                }
             }
         }
         
         for (int i = 0; i < numCourses; i++) {
-            if (degreeArr[i] >= 0) return false;
+            if (degreeArr[i] >= 0) {
+                return false;
+            }
         }
         
         return true;
     }
     
     private void buildGraph(int numCourses, int[][] prerequisites, int[] degreeArr, List<Set<Integer>> childrenList) {
-        for (int i = 0; i < numCourses; i++) {
-            degreeArr[i] = 0;
-        }
         for (int i = 0; i < numCourses; i++) {
             childrenList.add(new HashSet<Integer>());
         }
