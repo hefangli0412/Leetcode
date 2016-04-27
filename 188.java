@@ -63,10 +63,10 @@ public int maxProfit(int k, int[] prices) {
         int[] tmp = pre;
         pre = cur;
         cur = tmp;
-        int localMax = pre[0] - prices[0];
+        int localMax = - prices[0];
         for (int j = 1; j < n; j++) {
             cur[j] = Math.max(cur[j - 1],  prices[j] + localMax);
-            localMax = Math.max(localMax, pre[j] - prices[j]);
+            localMax = Math.max(localMax, pre[j - 1] - prices[j]);
         }
     }
     return cur[n - 1];
