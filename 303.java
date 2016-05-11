@@ -2,31 +2,19 @@
 // https://leetcode.com/problems/range-sum-query-immutable/
 
 public class NumArray {
-    private int[] sums;
+    
+    // prefixSum[i] denotes the sum of numbers 1, 2, ..., i - 1
+    int[] prefixSum;
     
     public NumArray(int[] nums) {
-        int n = nums.length;
-        
-        // do not forget about this corner case
-        // You are calling int[0] in the next statement
-        if (n == 0) {
-            sums = new int[0];
-            return;
-        }
-        
-        sums = new int[n];
-        sums[0] = nums[0];
-        for (int i = 1; i < n; i++) {
-            sums[i] = sums[i - 1] + nums[i];
+        prefixSum = new int[nums.length + 1];
+        for (int i = 1; i <= nums.length; i++) {
+            prefixSum[i] = prefixSum[i - 1] + nums[i - 1];
         }
     }
 
     public int sumRange(int i, int j) {
-        if (i == 0) {
-            return sums[j];
-        } else {
-            return sums[j] - sums[i - 1];
-        }
+        return prefixSum[j + 1] - prefixSum[i];
     }
 }
 
