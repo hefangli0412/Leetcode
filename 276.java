@@ -1,27 +1,33 @@
 // 276. Paint Fence
 // https://leetcode.com/problems/paint-fence/
 
-/* Dynamic Programming - 
-
-  When seeing back from the next level, ways to paint the same, or variable same would equal to dif*1 = dif, 
-  and ways to paint differently, variable dif, would equal to same*(k-1)+dif*(k-1) = (same + dif)*(k-1)
-*/
-
 public class Solution {
     public int numWays(int n, int k) {
-        if (k == 0 || n == 0) return 0;
-        
-        // For the first post
-        int same = 0;
-        int diff = k;
-        
-        // From the second and on
-        for (int i = 2; i <= n; i++) {
-            int total = same + diff;
-            same = diff; // cannot be three same colors
-            diff = total * (k - 1);
+        if (k == 0 || n == 0) {
+            return 0;
+        }
+        if (n == 1) {
+            return k;
         }
         
-        return same + diff;
+        // M1[i] denotes the number of different ways to paint fence 1, 2, .., i 
+        // and i and i - 1 have differnt colors
+        int[] M1 = new int[2];
+        // M2[i] denotes the number of different ways to paint fence 1, 2, .., i 
+        // and i and i - 1 have the same color
+        int[] M2 = new int[2];
+        
+        M1[0] = k;
+        M2[0] = k;
+        M1[1] = k * (k - 1);
+        M2[1] = k;
+        for (int i = 2; i < n; i++) {
+            // case 1: different from last post
+            M1[i % 2] = (M1[(i - 1) % 2] + M2[(i - 1) % 2]) * (k - 1);
+            
+            // case 2: same with last post
+            M2[i % 2] = M1[(i - 1) % 2];
+        }
+        return M1[(n - 1) % 2] + M2[(n - 1) % 2];
     }
 }
