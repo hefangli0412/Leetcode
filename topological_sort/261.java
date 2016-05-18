@@ -57,3 +57,71 @@ class UnionFind {
         return count;
     }
 }
+
+public class Solution {
+    public boolean validTree(int numVertices, int[][] edges) {
+		UnionFind uf = new UnionFind(numVertices);
+		for (int[] edge : edges) {
+			int i = edge[0];
+			int j = edge[1];
+			
+			if (!uf.union(i, j)) {
+				return false;
+			}
+		}
+		
+		return uf.count == 1;
+	}
+
+	// weighted, path compression
+	static class UnionFind {
+		private int[] ids;
+		private int[] sizes;
+		private int count;
+		
+		public UnionFind(int num) {
+			count = num;
+			ids = new int[num];
+			sizes = new int[num];
+			for (int i = 0; i < num; i++) {
+				ids[i] = i;
+				sizes[i] = 1;
+			}
+		}
+		
+		public int find(int i) {
+			int root = i;
+			while (ids[root] != root) {
+				root = ids[root];
+			}
+			while (i != root) {
+				int next = ids[i];
+				ids[i] = root;
+				i = next;
+			}
+			return root;
+		}
+		
+		public boolean union(int i, int j) {
+			int i_root = find(i);
+			int j_root = find(j);
+			if (i_root == j_root) {
+				return false;
+			}
+			
+			if (sizes[i_root] >= sizes[j_root]) {
+				ids[j_root] = i_root;
+				sizes[i_root] += sizes[j_root];
+			} else {
+				ids[i_root] = j_root;
+				sizes[j_root] += sizes[i_root];
+			}
+			count--;
+			return true;
+		}
+		
+		public int count() {
+			return count;
+		}
+	}
+}
