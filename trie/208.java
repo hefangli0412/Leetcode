@@ -8,13 +8,13 @@
   
   Refer to https://leetcode.com/discuss/46959/ac-java-solution-simple-using-single-array.
 */
+
 class TrieNode {
     TrieNode[] children = new TrieNode[26];
     boolean isWord = false;
     
     // Initialize your data structure here.
-    public TrieNode() {
-    }
+    public TrieNode() {}
 }
 
 public class Trie {
@@ -27,12 +27,12 @@ public class Trie {
     // Inserts a word into the trie.
     public void insert(String word) {
         TrieNode cur = root;
-        for (char ch : word.toCharArray()) {
-            if (cur.children[ch - 'a'] == null) {
-                cur.children[ch - 'a'] = new TrieNode();
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (cur.children[idx] == null) {
+                cur.children[idx] = new TrieNode();
             }
-            
-            cur = cur.children[ch - 'a'];
+            cur = cur.children[idx];
         }
         cur.isWord = true;
     }
@@ -40,22 +40,26 @@ public class Trie {
     // Returns if the word is in the trie.
     public boolean search(String word) {
         TrieNode cur = root;
-        for (char ch : word.toCharArray()) {
-            if (cur.children[ch - 'a'] == null) return false;
-            
-            cur = cur.children[ch - 'a'];
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (cur.children[idx] == null) {
+                return false;
+            }
+            cur = cur.children[idx];
         }
-        return cur.isWord == true;
+        return cur.isWord;
     }
 
     // Returns if there is any word in the trie
     // that starts with the given prefix.
     public boolean startsWith(String prefix) {
         TrieNode cur = root;
-        for (char ch : prefix.toCharArray()) {
-            if (cur.children[ch - 'a'] == null) return false;
-            
-            cur = cur.children[ch - 'a'];
+        for (int i = 0; i < prefix.length(); i++) {
+            int idx = prefix.charAt(i) - 'a';
+            if (cur.children[idx] == null) {
+                return false;
+            }
+            cur = cur.children[idx];
         }
         return true;
     }
