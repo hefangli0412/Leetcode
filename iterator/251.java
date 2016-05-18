@@ -5,39 +5,33 @@
 
 public class Vector2D implements Iterator<Integer> {
 
-    Deque<Iterator<Integer>> iterQueue;
+    Deque<Iterator<Integer>> iterStack;
     
     public Vector2D(List<List<Integer>> vec2d) {
-        iterQueue = new LinkedList<>();
+        iterStack = new LinkedList<>();
         for (int i = vec2d.size() - 1; i >= 0; i--) {
             List<Integer> vec = vec2d.get(i);
             if (!vec.isEmpty()) {
-                iterQueue.push(vec.iterator());
+                iterStack.push(vec.iterator());
             }
         }
     }
 
     @Override
     public Integer next() {
-        Iterator<Integer> curIter = iterQueue.pop();
+        Iterator<Integer> curIter = iterStack.pop();
         Integer result = curIter.next();
         if (curIter.hasNext()) {
-            iterQueue.push(curIter);
+            iterStack.push(curIter);
         }
         return result;
     }
 
     @Override
     public boolean hasNext() {
-        return !iterQueue.isEmpty();
+        return !iterStack.isEmpty();
     }
 }
-
-/**
- * Your Vector2D object will be instantiated and called as such:
- * Vector2D i = new Vector2D(vec2d);
- * while (i.hasNext()) v[f()] = i.next();
- */
  
  /* solution 2 */
 
@@ -50,10 +44,12 @@ public class Vector2D {
         curIter = null;
     }
 
+    @Override
     public int next() {
         return (int)curIter.next();
     }
 
+    @Override
     public boolean hasNext() {
         while (curIter == null || !curIter.hasNext()) {
             if (iterator.hasNext()) {
