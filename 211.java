@@ -7,23 +7,30 @@
   Pay attention to "*". Before calling searchHelper, check if the cur.children[i] is not null.
 */
 
-class TrieNode {
-    TrieNode[] children = new TrieNode[26];
-    boolean isWord = false;
-    public TrieNode() {}
-}
+
 
 public class WordDictionary {
+    
+    static class TrieNode {
+        TrieNode[] children = new TrieNode[26];
+        boolean isWord = false;
+        
+        public TrieNode() {};
+    }
+    
     TrieNode root = new TrieNode();
     
+    public WordDictionary() {};
+
     // Adds a word into the data structure.
     public void addWord(String word) {
         TrieNode cur = root;
-        for (char ch : word.toCharArray()) {
-            if (cur.children[ch - 'a'] == null) {
-                cur.children[ch - 'a'] = new TrieNode();
+        for (int i = 0; i < word.length(); i++) {
+            int idx = word.charAt(i) - 'a';
+            if (cur.children[idx] == null) {
+                cur.children[idx] = new TrieNode();
             }
-            cur = cur.children[ch - 'a'];
+            cur = cur.children[idx];
         }
         cur.isWord = true;
     }
@@ -31,29 +38,30 @@ public class WordDictionary {
     // Returns if the word is in the data structure. A word could
     // contain the dot character '.' to represent any one letter.
     public boolean search(String word) {
-        return searchHelper(word, 0, root);
+        return searchHelper(word, root, 0);
     }
     
-    public boolean searchHelper(String word, int idx, TrieNode cur) {
-        if (idx == word.length()) {
-            return cur != null && cur.isWord;
+    private boolean searchHelper(String word, TrieNode parent, int i) {
+        if (i == word.length()) {
+            return parent.isWord;
         }
         
-        char ch = word.charAt(idx);
-        
-        if (ch == '.') {
-            boolean flag = false;
-            for (int i = 0; i < 26; i++) {
-                if (cur.children[i] != null && searchHelper(word, idx + 1, cur.children[i]) == true) {
-                    flag = true;
+        if (word.charAt(i) == '.') {
+            for (TrieNode child : parent.children) {
+                if (child != null) {
+                    if (searchHelper(word, child, i + 1)) {
+                        return true;
+                    }
                 }
             }
-            return flag;
+            return false;
         }
         
-        if (cur.children[ch - 'a'] == null) return false;
-        
-        return searchHelper(word, idx + 1, cur.children[ch - 'a']);
+        int idx = word.charAt(i) - 'a';
+        if (parent.children[idx] == null) {
+            return false;
+        }
+        return searchHelper(word, parent.children[idx], i + 1);
     }
 }
 
