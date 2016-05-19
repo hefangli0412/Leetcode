@@ -2,6 +2,33 @@
 // https://leetcode.com/problems/flatten-2d-vector/
 
 /* solution 1 */
+// 思维难度稍大一点，不过代码比较简单，复杂度也低
+
+public class Vector2D implements Iterator<Integer> {
+    
+    private final Iterator<List<Integer>> outerIter;
+    private Iterator<Integer> innerIter;
+
+    public Vector2D(List<List<Integer>> vec2d) {
+        outerIter = vec2d.iterator();
+        innerIter = Collections.emptyIterator();
+    }
+
+    @Override
+    public Integer next() {
+        return innerIter.next();
+    }
+
+    @Override
+    public boolean hasNext() {
+        while (!innerIter.hasNext() && outerIter.hasNext()) {
+            innerIter = outerIter.next().iterator();
+        }
+        return innerIter.hasNext();
+    }
+}
+
+/* solution 2 */
 
 public class Vector2D implements Iterator<Integer> {
 
@@ -33,37 +60,4 @@ public class Vector2D implements Iterator<Integer> {
     }
 }
  
- /* solution 2 */
 
-public class Vector2D {
-    private final Iterator<List<Integer>> iterator;
-    private Iterator<Integer> curIter;
-    
-    public Vector2D(List<List<Integer>> vec2d) {
-        iterator = vec2d.iterator();
-        curIter = null;
-    }
-
-    @Override
-    public int next() {
-        return (int)curIter.next();
-    }
-
-    @Override
-    public boolean hasNext() {
-        while (curIter == null || !curIter.hasNext()) {
-            if (iterator.hasNext()) {
-                curIter = iterator.next().iterator();
-            } else {
-                return false;
-            }
-        }
-        return true; 
-    }
-}
-
-/**
- * Your Vector2D object will be instantiated and called as such:
- * Vector2D i = new Vector2D(vec2d);
- * while (i.hasNext()) v[f()] = i.next();
- */
