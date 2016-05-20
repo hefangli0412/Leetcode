@@ -80,8 +80,25 @@ public class Solution {
 		
 		int len = s1.length();
 		boolean[][][] dp = new boolean[len][len][len + 1];
+		
+		// 写法1
+		for (int i = len - 1; i >= 0; i--) {
+			for (int j = len - 1; j >= 0; j--) {
+				for (int k = 1; k <= len - Math.max(i, j); k++) {
+					if (k == 1) {
+						dp[i][j][k] = s1.charAt(i) == s2.charAt(j);
+					} else {
+						for (int t = 1; t < k; t++) {
+							dp[i][j][k] |= dp[i][j][t] && dp[i+t][j+t][k-t] || dp[i][j+k-t][t] && dp[i+t][j][k-t];
+						}
+					}
+				}
+			}
+		}
+		
+		// 写法2
 		for (int k = 1; k <= len; k++) {
-		    // 以i,j开头的string长度不能小于k
+		    	// 以i,j开头的string长度不能小于k
 			for (int i = 0; i + k - 1 < len; i++) {
 				for (int j = 0; j + k - 1 < len; j++) {
 					if (k == 1) {
