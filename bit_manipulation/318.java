@@ -3,36 +3,36 @@
 /* Solution 1 - pruning */
 // 先把bit map计算出来，compare的时候就不用计算两遍了
 public class Solution {
-    public int maxProduct(String[] words) {
-        Arrays.sort(words, new Comparator<String>() {
+	public int maxProduct(String[] words) {
+		Arrays.sort(words, new Comparator<String>() {
 			@Override
 			public int compare(String word1, String word2) {
 				return Integer.compare(word2.length(), word1.length());
 			}
 		});
-		
+
 		int[] bitMap = new int[words.length];
 		for (int i = 0; i < words.length; i++) {
-		    for (int j = 0; j < words[i].length(); j++) {
-    			bitMap[i] |= 1 << (words[i].charAt(j) - 'a');
-    		}
+			for (int j = 0; j < words[i].length(); j++) {
+				bitMap[i] |= 1 << (words[i].charAt(j) - 'a');
+			}
 		}
-		
-        int result = 0;
-        for (int i = 0; i < words.length; i++) {
-            for (int j = 0; j < i; j++) {
-                int product = words[i].length() * words[j].length();
-                if (product <= result) {
-                    break; //prunning
-                }
-                if ((bitMap[i] & bitMap[j]) == 0) {
-                    result = Math.max(result, product);
-                    break; //prunning
-                }
-            }
-        }
-        return result;
-    }
+
+		int result = 0;
+		for (int i = 0; i < words.length; i++) {
+			for (int j = 0; j < i; j++) {
+				int product = words[i].length() * words[j].length();
+				if (product <= result) {
+					break;
+				}
+				if ((bitMap[i] & bitMap[j]) == 0) {
+					result = Math.max(result, product);
+					break;
+				}
+			}
+		}
+		return result;
+	}
 }
 
 /* Solution 2 - Dijkstra */
