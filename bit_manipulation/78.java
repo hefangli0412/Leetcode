@@ -11,17 +11,17 @@ public class Solution {
         
         int n = nums.length;
         // get 2's power
-		int max = (1 << n) - 1;
-		
-		for (int i = 0; i <= max; i++) {
-			List<Integer> subset = new ArrayList<>();
-			for (int j = 0; j < n; j++) {
-				if ((i & (1 << j)) != 0) {
-				    subset.add(nums[j]);
-				}
+	int max = (1 << n) - 1;
+	
+	for (int i = 0; i <= max; i++) {
+		List<Integer> subset = new ArrayList<>();
+		for (int j = 0; j < n; j++) {
+			if ((i & (1 << j)) != 0) {
+			    subset.add(nums[j]);
 			}
-			result.add(subset);
 		}
-		return result;
+		result.add(subset);
+	}
+	return result;
     }
 }
