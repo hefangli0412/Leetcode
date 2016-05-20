@@ -4,13 +4,15 @@
 // 先把bit map计算出来，compare的时候就不用计算两遍了
 public class Solution {
 	public int maxProduct(String[] words) {
+		// sort by decreasing word length
 		Arrays.sort(words, new Comparator<String>() {
 			@Override
 			public int compare(String word1, String word2) {
 				return Integer.compare(word2.length(), word1.length());
 			}
 		});
-
+		
+		// precompute
 		int[] bitMap = new int[words.length];
 		for (int i = 0; i < words.length; i++) {
 			for (int j = 0; j < words[i].length(); j++) {
@@ -23,11 +25,11 @@ public class Solution {
 			for (int j = 0; j < i; j++) {
 				int product = words[i].length() * words[j].length();
 				if (product <= result) {
-					break;
+					break; // pruning
 				}
 				if ((bitMap[i] & bitMap[j]) == 0) {
 					result = Math.max(result, product);
-					break;
+					break; // pruning
 				}
 			}
 		}
