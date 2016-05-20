@@ -60,36 +60,41 @@ public class Solution {
 /* Solution 2 - Dynamic Programming */
 /* 填表是以string长度逐渐递增的，然后穷举了所有的可能行，它们只依赖于长度更小的string的结果（以前填写的行），
 与当前行无关，所以顺序可以随意.
+
+填表的顺序可以通过recursive call观察得到。
+假设dp状态是i,j,k分别表示两个string的起点和长度，不难发现
+dp(i,j,k) depends on dp(i, j, t), dp(i+t, j+t, k-t), dp(i, j+k-t, t), dp(i+t, j, k-t), 1 <= t < k。
+由于 dp(i, j, t) 所以k是从小到大填的，其他的dependency要么i变大，要么j变大，所以应该按照下面的顺序填表肯定满足topological order。
+    for (int i = n - 1; i >= 0; i--) 
+      for (int j = n - 1; j >= 0; j--) 
+        for (int k = 1; k <= n - Math.max(i, j); k++) 
 */
 public class Solution {
-    public boolean isScramble(String s1, String s2) {
-        if (s1.length() != s2.length()) {
-            return false;  
-        }
-        if (s1.equals(s2)) {
-            return true; 
-        }
-        
-        int length = s1.length();
-        // dp[i][j][len]，表示从s1的第i个字符开始长度为len的子串，和从s2的第j个字符开始长度为len的子串，是否互为scramble.
-        boolean[][][] dp = new boolean[length][length][length + 1];  
-        for (int i = 0; i < length; i++) {  
-            for (int j = 0; j < length; j++) {  
-                dp[i][j][1] = s1.charAt(i) == s2.charAt(j);  
-            }  
-        }  
-          
-        for (int len = 2; len <= length; len++) {  
-            for (int i = 0; i + len - 1 < length; i++) {  
-                for (int j = 0; j + len - 1 < length; j++) {  
-                    for (int k = 1; k < len; k++) {  
-                        dp[i][j][len] |= dp[i][j][k] && dp[i + k][j + k][len - k] 
-                                      || dp[i][j + len - k][k] && dp[i + k][j][len - k];  
-                    }  
-                }  
-            }  
-        }  
-          
-        return dp[0][0][length];
-    }
+	public boolean isScramble2(String s1, String s2) {
+		if (s1.length() != s2.length()) {
+			return false;
+		}
+		if (s1.equals(s2)) {
+			return true;
+		}
+		
+		int len = s1.length();
+		boolean[][][] dp = new boolean[len][len][len + 1];
+		for (int k = 1; k <= len; k++) {
+		    // 以i,j开头的string长度不能小于k
+			for (int i = 0; i + k - 1 < len; i++) {
+				for (int j = 0; j + k - 1 < len; j++) {
+					if (k == 1) {
+						dp[i][j][k] = s1.charAt(i) == s2.charAt(j);
+					} else {
+						for (int t = 1; t < k; t++) {
+							dp[i][j][k] |= dp[i][j][t] && dp[i+t][j+t][k-t] || dp[i][j+k-t][t] && dp[i+t][j][k-t];
+						}
+					}
+				}
+			}
+		}
+		
+		return dp[0][0][len];
+	}
 }
