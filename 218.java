@@ -89,3 +89,78 @@ https://docs.oracle.com/javase/7/docs/api/java/util/TreeMap.html
 A Red-Black tree based NavigableMap implementation.
 This implementation provides guaranteed log(n) time cost for the containsKey, get, put and remove operations. 
 */
+
+
+
+public class SkylineProblemSolver {
+    static class Point implements Comparable<Point> {
+        int xcoord;
+        int height;
+        boolean isLeft;
+        
+        public Point(int xcoord, int height, boolean isLeft) {
+            this.xcoord = xcoord;
+            this.height = height;
+            this.isLeft = isLeft;
+        }
+        
+        @Override
+        public int compareTo(Point another) {
+            if (xcoord != another.xcoord) { // smaller xcoordinates have higher priority
+                return Integer.compare(xcoord, another.xcoord);
+            } else if (isLeft != another.isLeft) { // right points have higher priority
+            	return isLeft ? -1 : 1;
+            } else if (isLeft) { // start with higher first
+                return Integer.compare(another.height, height);
+            } else { // end with lower first
+                return Integer.compare(height, another.height);
+            }
+        }
+    }
+    
+    public List<int[]> getSkyline(int[][] buildings) {
+        List<int[]> result = new ArrayList<>();
+        if (buildings == null || buildings.length == 0 || buildings[0].length == 0) {
+            return result;
+        }
+        
+        List<Point> points = new ArrayList<>();
+        for (int[] building : buildings) {
+            points.add(new Point(building[0], building[2], true));
+            points.add(new Point(building[1], building[2], false));
+        }
+        Collections.sort(points);
+        
+        TreeMap<Integer, Integer> heightMaxHeap = new TreeMap<>(Collections.reverseOrder());
+        for (Point point : points) {
+            if (point.isLeft) {
+                if (heightMaxHeap.isEmpty() || point.height > heightMaxHeap.firstKey()) {
+                    result.add(new int[]{point.xcoord, point.height});
+                }
+                
+                Integer heightCount = heightMaxHeap.get(point.height);
+                if (heightCount == null) {
+                	heightCount = 0;
+                }
+                heightMaxHeap.put(point.height, heightCount + 1);
+            } else {
+                if (point.height == heightMaxHeap.firstKey() && heightMaxHeap.firstEntry().getValue() == 1) {
+                	Map.Entry<Integer, Integer> secondLargestEntry = heightMaxHeap.higherEntry(heightMaxHeap.firstKey());
+                	int secondLargestHeight = 0;
+                	if (secondLargestEntry != null) {
+                		secondLargestHeight = secondLargestEntry.getKey();
+                	}
+                    result.add(new int[]{point.xcoord, secondLargestHeight});
+                }
+                
+                Integer heightCount = heightMaxHeap.get(point.height);
+                if (heightCount == 1) {
+                	heightMaxHeap.remove(point.height);
+                } else {
+                    heightMaxHeap.put(point.height, heightCount - 1);                	
+                }
+            }
+        }
+        return result;
+    }
+}
